@@ -1,8 +1,120 @@
-# openmp-pr-scraper
+# 🧠 OpenMP PR Scraper & Comment Analyzer
 
-A Python tool to collect OpenMP pull request diffs and review comments from GitHub.
+A GitHub data mining pipeline to collect, process, and analyze Pull Requests (PRs) from the LLVM/OpenMP project. It maps review and issue comments to code hunks and provides statistical summaries.
 
-## Setup
 
-1. Create a `.env` file with your GitHub token (see `.env.example`).
-2. Install dependencies:
+## 📦 Dependencies
+
+Install the required Python packages:
+
+```bash
+pip install -r requirements.txt
+```
+
+**`requirements.txt` should contain:**
+
+```txt
+requests
+python-dotenv
+matplotlib
+pandas
+```
+
+## 🔐 Environment Setup
+
+Create a `.env` file in the project root with your GitHub token:
+
+```env
+GITHUB_TOKEN=ghp_your_personal_access_token_here
+```
+
+> Make sure your token has at least `read:public_repo` or `repo` scope.
+
+---
+
+## 🗂️ File Structure
+
+```bash
+.
+├── .env
+├── requirements.txt
+├── run_preprocessing.sh
+├── data/
+│   ├── openmp_prs.json                  # PRs and raw comments
+│   ├── openmp_hunks_comments.json       # Mapped comments to hunks
+│   ├── prs_with_review_comments.json    # Filtered PRs with inline comments
+│   └── mapping_stats.json               # Final stats
+├── src/
+│   ├── collect_data.py
+│   ├── find_prs_with_review_comments.py
+│   ├── preprocess_data.py
+│   └── analyze_mappings.py
+```
+
+## ▶️ Project Workflow
+
+### 1. 🔎 Find PRs with Review Comments
+
+```bash
+python src/find_prs_with_review_comments.py
+```
+
+**Output:** `data/prs_with_review_comments.json`
+
+
+### 2. 🧲 Collect PR Data (Diffs + Comments)
+
+```bash
+python src/collect_data.py
+```
+
+**Output:** `data/openmp_prs.json`
+
+
+### 3. 🧮 Map Comments to Code Hunks
+
+```bash
+python src/preprocess_data.py
+```
+
+**Output:** `data/openmp_hunks_comments.json`
+
+
+### 4. 📊 Analyze Mappings & Generate Stats
+
+```bash
+python src/analyze_mappings.py
+```
+
+**Output:**
+
+* Summary in terminal
+* `data/mapping_stats.json`
+
+
+### ✅ Run All Steps in One
+
+```bash
+chmod +x run_preprocessing.sh
+./run_preprocessing.sh
+```
+
+
+
+## 📁 Output Description
+
+| File                            | Description                             |
+| ------------------------------- | --------------------------------------- |
+| `openmp_prs.json`               | Raw PRs with review + issue comments    |
+| `openmp_hunks_comments.json`    | Comments mapped to file hunks           |
+| `mapping_stats.json`            | Summary of comment stats                |
+| `prs_with_review_comments.json` | PRs filtered to contain inline comments |
+
+
+
+## 🧪 Notes
+
+* Review comments are inline comments attached to code.
+* Issue comments are general PR discussions.
+* Comment types are separated and analyzed independently.
+

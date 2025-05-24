@@ -122,6 +122,9 @@ chmod +x run_preprocessing.sh
 
 ---
 
+
+
+VECTOR DB
 🔧 Setup Instructions
 Step 1: Install the following Python libraries
 
@@ -138,21 +141,18 @@ Uninstall TensorFlow
 Install protobuf version 3.20.*
 
 📁 Files Used
-src/build_vector_db.py – builds a vector database from historical PR comments
+1.src/build_vector_db.py – builds a vector database from historical PR comments
 
-src/query_vector_db.py – allows you to test the search with new code diffs
+2.src/query_vector_db.py – allows you to test the search with new code diffs
 
-data/openmp_hunks_comments.json – contains processed PR comment mappings
+3.data/openmp_hunks_comments.json – contains processed PR comment mappings
 
-data/faiss_index.idx – the generated FAISS vector index
+4.data/faiss_index.idx – the generated FAISS vector index
 
-data/comments_lookup.json – stores queries and comments for lookup after search
+5.data/comments_lookup.json – stores queries and comments for lookup after search
 
 ⚙️ How to Run
 To build the vector database:
-
 Run build_vector_db.py
-
 This will read from openmp_hunks_comments.json
-
 It will generate faiss_index.idx and comments_lookup.json

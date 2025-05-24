@@ -109,12 +109,12 @@ python src/suggest_code_review.py <pr#>
 ```
 
 **Dummy Output:**
- 
+ ```
 📥 Fetching hunks for PR #98547 \
 🔍 Hunk from clang/include/clang/Parse/Parser.h, line 3368 \
 💬 Suggested Comment: \
 The addition of `TildeLoc` is good for parsing correctness. However, could you add a brief comment explaining the purpose of `TildeLoc` for better understanding in the future?
-
+```
 
 ## Output Description
 

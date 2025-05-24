@@ -46,7 +46,7 @@ GITHUB_TOKEN=ghp_your_personal_access_token_here
 │   └── mapping_stats.json               # Final stats
 ├── src/
 │   ├── collect_data.py
-│   ├── find_prs_with_review_comments.py
+│   ├── find_comments.py
 │   ├── preprocess_data.py
 │   └── analyze_mappings.py
 ```
@@ -56,7 +56,7 @@ GITHUB_TOKEN=ghp_your_personal_access_token_here
 ### 1. 🔎 Find PRs with Review Comments
 
 ```bash
-python src/find_prs_with_review_comments.py
+python src/find_comments.py
 ```
 
 **Output:** `data/prs_with_review_comments.json`

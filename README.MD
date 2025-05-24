@@ -1,7 +1,6 @@
-# OpenMP PR Scraper & Code Review Comment Generator
+# GenAI-Powered Code Reviewer Bot for OpenMP
 
-A GitHub data mining pipeline to collect, process, and analyze Pull Requests (PRs) from the LLVM/OpenMP project. It maps review and issue comments to code hunks and provides statistical summaries.
-
+Python-first prototype of a Clang-compatible CLI tool that analyzes OpenMP-related pull requests and suggests review comments using GenAI, trained on historical GitHub data.
 
 ## Dependencies
 

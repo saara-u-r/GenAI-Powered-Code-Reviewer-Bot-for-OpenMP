@@ -118,3 +118,44 @@ chmod +x run_preprocessing.sh
 * Issue comments are general PR discussions.
 * Comment types are separated and analyzed independently.
 
+
+
+---
+
+## 🧠 Vector Database for Review Comment Retrieval
+
+This module embeds PR diff-comment pairs using SentenceTransformers and stores them in a FAISS vector database. It enables fast similarity search to suggest historical review comments for new OpenMP code changes.
+
+### 📦 Dependencies
+
+Install required Python packages (if not already installed):
+
+```bash
+pip install faiss-cpu sentence-transformers numpy
+In case of errors with TensorFlow or protobuf, run:
+
+bash
+Copy
+Edit
+pip uninstall tensorflow
+pip install protobuf==3.20.*
+🗂️ File Overview
+File	Purpose
+src/build_vector_db.py	Builds the FAISS index using comment-context embeddings
+src/query_vector_db.py	Queries the vector DB to retrieve similar past review comments
+data/openmp_hunks_comments.json	Input JSON with PR metadata and review comments
+data/faiss_index.idx	Output: FAISS vector index file
+data/comments_lookup.json	Output: Stores original queries and associated comments
+
+⚙️ How to Use
+🔨 Build the Vector Database
+bash
+Copy
+Edit
+python src/build_vector_db.py
+This will generate:
+
+data/faiss_index.idx
+
+data/comments_lookup.json
+

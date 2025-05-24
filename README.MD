@@ -11,8 +11,6 @@ Install the required Python packages:
 pip install -r requirements.txt
 ```
 
-**`requirements.txt` should contain:**
-
 ## Environment Setup
 
 Create a `.env` file in the project root with your GitHub token:

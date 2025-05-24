@@ -122,40 +122,37 @@ chmod +x run_preprocessing.sh
 
 ---
 
-## 🧠 Vector Database for Review Comment Retrieval
+🔧 Setup Instructions
+Step 1: Install the following Python libraries
 
-This module embeds PR diff-comment pairs using SentenceTransformers and stores them in a FAISS vector database. It enables fast similarity search to suggest historical review comments for new OpenMP code changes.
+faiss-cpu
 
-### 📦 Dependencies
+sentence-transformers
 
-Install required Python packages (if not already installed):
+numpy
 
-```bash
-pip install faiss-cpu sentence-transformers numpy
-In case of errors with TensorFlow or protobuf, run:
+If errors occur related to TensorFlow or protobuf:
 
-bash
-Copy
-Edit
-pip uninstall tensorflow
-pip install protobuf==3.20.*
-🗂️ File Overview
-File	Purpose
-src/build_vector_db.py	Builds the FAISS index using comment-context embeddings
-src/query_vector_db.py	Queries the vector DB to retrieve similar past review comments
-data/openmp_hunks_comments.json	Input JSON with PR metadata and review comments
-data/faiss_index.idx	Output: FAISS vector index file
-data/comments_lookup.json	Output: Stores original queries and associated comments
+Uninstall TensorFlow
 
-⚙️ How to Use
-🔨 Build the Vector Database
-bash
-Copy
-Edit
-python src/build_vector_db.py
-This will generate:
+Install protobuf version 3.20.*
 
-data/faiss_index.idx
+📁 Files Used
+src/build_vector_db.py – builds a vector database from historical PR comments
 
-data/comments_lookup.json
+src/query_vector_db.py – allows you to test the search with new code diffs
 
+data/openmp_hunks_comments.json – contains processed PR comment mappings
+
+data/faiss_index.idx – the generated FAISS vector index
+
+data/comments_lookup.json – stores queries and comments for lookup after search
+
+⚙️ How to Run
+To build the vector database:
+
+Run build_vector_db.py
+
+This will read from openmp_hunks_comments.json
+
+It will generate faiss_index.idx and comments_lookup.json

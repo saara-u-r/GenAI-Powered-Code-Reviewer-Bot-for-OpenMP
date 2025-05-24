@@ -1,9 +1,9 @@
-# 🧠 OpenMP PR Scraper & Comment Analyzer
+# OpenMP PR Scraper & Code Review Comment Generator
 
 A GitHub data mining pipeline to collect, process, and analyze Pull Requests (PRs) from the LLVM/OpenMP project. It maps review and issue comments to code hunks and provides statistical summaries.
 
 
-## 📦 Dependencies
+## Dependencies
 
 Install the required Python packages:
 
@@ -13,26 +13,20 @@ pip install -r requirements.txt
 
 **`requirements.txt` should contain:**
 
-```txt
-requests
-python-dotenv
-matplotlib
-pandas
-```
-
-## 🔐 Environment Setup
+## Environment Setup
 
 Create a `.env` file in the project root with your GitHub token:
 
 ```env
 GITHUB_TOKEN=ghp_your_personal_access_token_here
+GEMINI_API_KEY=your_gemini_api_key
 ```
 
 > Make sure your token has at least `read:public_repo` or `repo` scope.
 
 ---
 
-## 🗂️ File Structure
+## File Structure
 
 ```bash
 .
@@ -40,20 +34,26 @@ GITHUB_TOKEN=ghp_your_personal_access_token_here
 ├── requirements.txt
 ├── run_preprocessing.sh
 ├── data/
-│   ├── openmp_prs.json                  # PRs and raw comments
-│   ├── openmp_hunks_comments.json       # Mapped comments to hunks
-│   ├── prs_with_review_comments.json    # Filtered PRs with inline comments
-│   └── mapping_stats.json               # Final stats
+│   ├── openmp_prs.json
+│   ├── openmp_hunks_comments.json
+│   ├── prs_with_review_comments.json
+│   ├── mapping_stats.json
+│   ├── faiss_index.idx
+│   └── comments_lookup.json
 ├── src/
 │   ├── collect_data.py
 │   ├── find_comments.py
 │   ├── preprocess_data.py
-│   └── analyze_mappings.py
+│   ├── analyze_mappings.py
+│   ├── build_vector_db.py
+│   ├── diff_utils.py
+│   └── suggest_code_review.py
+
 ```
 
-## ▶️ Project Workflow
+## Project Workflow
 
-### 1. 🔎 Find PRs with Review Comments
+### 1. Find PRs with Review Comments
 
 ```bash
 python src/find_comments.py
@@ -62,7 +62,7 @@ python src/find_comments.py
 **Output:** `data/prs_with_review_comments.json`
 
 
-### 2. 🧲 Collect PR Data (Diffs + Comments)
+### 2. Collect PR Data (Diffs + Comments)
 
 ```bash
 python src/collect_data.py
@@ -71,7 +71,7 @@ python src/collect_data.py
 **Output:** `data/openmp_prs.json`
 
 
-### 3. 🧮 Map Comments to Code Hunks
+### 3. Map Comments to Code Hunks
 
 ```bash
 python src/preprocess_data.py
@@ -80,7 +80,7 @@ python src/preprocess_data.py
 **Output:** `data/openmp_hunks_comments.json`
 
 
-### 4. 📊 Analyze Mappings & Generate Stats
+### 4. Analyze Mappings & Generate Stats
 
 ```bash
 python src/analyze_mappings.py
@@ -92,16 +92,35 @@ python src/analyze_mappings.py
 * `data/mapping_stats.json`
 
 
-### ✅ Run All Steps in One
+### 5. Build a Vector Store
 
 ```bash
-chmod +x run_preprocessing.sh
-./run_preprocessing.sh
+python src/build_vector_dbs.py
 ```
 
+**Output:**
+
+* `data/comments_lookup.json`
+* `faiss_index.idx`
 
 
-## 📁 Output Description
+### 6. Suggest Code Review Comments
+
+```bash
+python src/suggest_code_review.py <pr#>
+```
+
+**Dummy Output:**
+
+* ` 
+📥 Fetching hunks for PR #98547
+🔍 Hunk from clang/include/clang/Parse/Parser.h, line 3368
+💬 Suggested Comment:
+The addition of `TildeLoc` is good for parsing correctness. However, could you add a brief comment explaining the purpose of `TildeLoc` for better understanding in the future?
+  `
+
+
+## Output Description
 
 | File                            | Description                             |
 | ------------------------------- | --------------------------------------- |
@@ -109,50 +128,5 @@ chmod +x run_preprocessing.sh
 | `openmp_hunks_comments.json`    | Comments mapped to file hunks           |
 | `mapping_stats.json`            | Summary of comment stats                |
 | `prs_with_review_comments.json` | PRs filtered to contain inline comments |
-
-
-
-## 🧪 Notes
-
-* Review comments are inline comments attached to code.
-* Issue comments are general PR discussions.
-* Comment types are separated and analyzed independently.
-
-
-
----
-
-
-
-VECTOR DB
-🔧 Setup Instructions
-Step 1: Install the following Python libraries
-
-faiss-cpu
-
-sentence-transformers
-
-numpy
-
-If errors occur related to TensorFlow or protobuf:
-
-Uninstall TensorFlow
-
-Install protobuf version 3.20.*
-
-📁 Files Used
-1.src/build_vector_db.py – builds a vector database from historical PR comments
-
-2.src/query_vector_db.py – allows you to test the search with new code diffs
-
-3.data/openmp_hunks_comments.json – contains processed PR comment mappings
-
-4.data/faiss_index.idx – the generated FAISS vector index
-
-5.data/comments_lookup.json – stores queries and comments for lookup after search
-
-⚙️ How to Run
-To build the vector database:
-Run build_vector_db.py
-This will read from openmp_hunks_comments.json
-It will generate faiss_index.idx and comments_lookup.json
+| `comments_lookup.json`          | store queries and comments for lookup   |
+| `faiss_index.idx`               | generated FAISS vector index            |

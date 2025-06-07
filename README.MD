@@ -33,7 +33,7 @@ GEMINI_API_KEY=your_gemini_api_key
 ├── data/
 │   ├── openmp_prs.json
 │   ├── openmp_hunks_comments.json
-│   ├── prs_with_review_comments.json
+│   ├── openmp_indexed_closed_prs.json
 │   ├── mapping_stats.json
 │   ├── faiss_index.idx
 │   └── comments_lookup.json
@@ -56,7 +56,7 @@ GEMINI_API_KEY=your_gemini_api_key
 python src/find_comments.py
 ```
 
-**Output:** `data/prs_with_review_comments.json`
+**Output:** `data/openmp_indexed_closed_prs.json`
 
 
 ### 2. Collect PR Data (Diffs + Comments)
@@ -122,6 +122,6 @@ The addition of `TildeLoc` is good for parsing correctness. However, could you a
 | `openmp_prs.json`               | Raw PRs with review + issue comments    |
 | `openmp_hunks_comments.json`    | Comments mapped to file hunks           |
 | `mapping_stats.json`            | Summary of comment stats                |
-| `prs_with_review_comments.json` | PRs filtered to contain inline comments |
+| `openmp_indexed_closed_prs.json`| PRs filtered to contain inline comments |
 | `comments_lookup.json`          | store queries and comments for lookup   |
 | `faiss_index.idx`               | generated FAISS vector index            |

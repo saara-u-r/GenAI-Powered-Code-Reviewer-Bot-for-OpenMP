@@ -92,7 +92,7 @@ python src/analyze_mappings.py
 ### 5. Build a Vector Store
 
 ```bash
-python src/build_vector_dbs.py
+python src/build_vector_db.py
 ```
 
 **Output:**

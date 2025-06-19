@@ -8,8 +8,9 @@ import google.generativeai as genai
 from diff_utils import fetch_pr_diff_files  # Replace with your actual function
 
 # --- CONFIG ---
-DATA_PATH = "data/comments_lookup.json"
-INDEX_PATH = "data/faiss_index.idx"
+BASE_DIR = Path(__file__).resolve().parent.parent  # Goes from /src/ to root
+DATA_PATH = BASE_DIR / "data" / "comments_lookup.json"
+INDEX_PATH = BASE_DIR / "data" / "faiss_index.idx"
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"  # Fast and small
 NUM_NEIGHBORS = 5
 GENERATION_MODEL = "gemini-2.0-flash"
@@ -22,8 +23,8 @@ embedder = SentenceTransformer(EMBEDDING_MODEL)
 model = genai.GenerativeModel(GENERATION_MODEL)
 
 # --- Load FAISS index + metadata ---
-index = faiss.read_index(INDEX_PATH)
-with open(DATA_PATH) as f:
+index = faiss.read_index(str(INDEX_PATH))
+with open(str(DATA_PATH)) as f:
     raw = json.load(f)
     metadata = raw["queries"]
 
@@ -40,7 +41,6 @@ def retrieve_similar_comments(hunk_text, k=NUM_NEIGHBORS):
             entry = metadata[int(idx)]
             example_comments = f"- {entry.strip()}"
             results.append(("", example_comments))
-
     return results
 
 def generate_review_comment(diff, similar_examples):
@@ -76,5 +76,3 @@ if __name__ == "__main__":
     parser.add_argument("pr_number", type=int, help="GitHub PR number")
     args = parser.parse_args()
     main(args.pr_number)
-
-# python suggest_code_reviews.py 98547
